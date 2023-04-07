@@ -8,7 +8,7 @@ Prisma is a tool for creating and managing a database schema. It is a database a
 
 - Prisma is a part of the Prisma ecosystem, which includes the Prisma Client, which is an auto-generated and type-safe database client.
 
-## How to use Prisma in Node.js?
+## How to setup Prisma in Node.js?
 
 1. Create a new directory for your project and initialize it with `npm init -y`
 
@@ -23,10 +23,6 @@ Prisma is a tool for creating and managing a database schema. It is a database a
    ```
    const express = require("express");
    const app = express();
-
-   app.get("/", (req, res) => {
-     res.send("Hello World!");
-   });
 
    app.listen(3000, () => {
      console.log("Server is running on port 3000");
@@ -93,3 +89,69 @@ Prisma is a tool for creating and managing a database schema. It is a database a
     ```
 
     After running this command, `Student` table will be added to your MySQL database `prisma`.
+
+## CRUD Operations with Prisma
+
+- Go to `index.js` and create a new instance of Prisma Client as follows:
+
+  ```
+  const { PrismaClient } = require("@prisma/client");
+  const prisma = new PrismaClient();
+  ```
+
+### Create
+
+- Create a new route to create a new student:
+
+  ```
+   app.post("/", async (req, res) => {
+      const newStudent = await prisma.student.create({data: req.body });
+      res.json(newStudent);
+   });
+  ```
+
+  where `student` is the name of the model, and `req.body` is the data that will be added to the database.
+
+### Read
+
+- Create a new route to get all students:
+
+  ```
+   app.get("/", async (req, res) => {
+      const allStudents = await prisma.student.findMany();
+      res.json(allStudents);
+   });
+  ```
+
+### Update
+
+- Create a new route to update a student:
+
+  ```
+   app.put("/:id", async (req, res) => {
+      const id = req.params.id;
+      const newEmail = req.body.email;
+      const updatedStudent = await prisma.student.update({
+         where: { id: parseInt(id) },
+         data: { email: newEmail },
+      });
+      res.json(updatedStudent);
+   });
+  ```
+
+  where `req.params.id` is the ID of the student, and `req.body.email` is the new email of the student that will be updated.
+
+### Delete
+
+- Create a new route to delete a student:
+
+  ```
+   app.delete("/:id", async (req, res) => {
+      const deletedStudent = await prisma.student.delete({
+         where: { id: Number(req.params.id) },
+      });
+      res.json(deletedStudent);
+   });
+  ```
+
+  where `req.params.id` is the ID of the student that will be deleted.
