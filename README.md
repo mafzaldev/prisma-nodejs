@@ -61,7 +61,7 @@ Prisma is a tool for creating and managing a database schema. It is a database a
    and `Student` is the name of the model, and `id`(ID of the record, with autoincrement property),`name`, `age`, `email`, `createdAt` and `updatedAt` are the fields of the model.
 
 6. Run your MySQL server and create a new database called `prisma`
-7. Copy the `Connection String` from your MySQL.
+7. Copy the `Connection String` from your Database. In this case, I'm using MySQL.
 8. Create a new file called `.env` and add the copied `Connection String` to `DATABASE_URL` field:
 
    ```
@@ -148,7 +148,7 @@ Prisma is a tool for creating and managing a database schema. It is a database a
   ```
    app.delete("/:id", async (req, res) => {
       const deletedStudent = await prisma.student.delete({
-         where: { id: Number(req.params.id) },
+         where: { id: parseInt(id) },
       });
       res.json(deletedStudent);
    });
